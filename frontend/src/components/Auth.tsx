@@ -1,13 +1,45 @@
-import type { SignupInput } from "@ujjwalmishra102/medium-common";
+import {
+  type SigninInput,
+  type SignupInput,
+} from "@ujjwalmishra102/medium-common";
 import { useState, type ChangeEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../config";
+import axios, { AxiosError } from "axios";
 
-export const Auth = ({ type }: { type: "signup" | "signin" }) => {
-  const [postInputs, setPostInputs] = useState<SignupInput>({
-    name: "",
-    email: "",
-    password: "",
-  });
+type AuthProps = { type: "signup" } | { type: "signin" };
+
+export const Auth = ({ type }: AuthProps) => {
+  const [postInputs, setPostInputs] = useState(
+    type === "signup"
+      ? ({ name: "", email: "", password: "" } as SignupInput)
+      : ({ email: "", password: "" } as SigninInput)
+  );
+  const navigate = useNavigate();
+
+  async function sendRequest() {
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/user/${type}`,
+        postInputs
+      );
+      console.log(response.data);
+      if (response?.data?.jwt) {
+        const jwt = await response?.data?.jwt;
+        localStorage.setItem("token", jwt);
+        navigate("/blogs");
+      } else alert(response?.data.error);
+    } catch (err) {
+      // console.log(error);
+      const error = err as AxiosError<{ error: string }>;
+      if (error.response?.data?.error) {
+        alert(error.response.data.error); // backend error
+      } else {
+        alert(error.message); // fallback generic error
+      }
+    }
+  }
+
   return (
     <div className="h-screen flex justify-center items-center">
       <div>
@@ -67,6 +99,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
           />
         </div>
         <button
+          onClick={sendRequest}
           type="button"
           className="bg-black text-white mt-6 w-full py-2 rounded-md cursor-pointer"
         >
