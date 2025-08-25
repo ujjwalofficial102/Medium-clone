@@ -26,7 +26,7 @@ export const Auth = ({ type }: AuthProps) => {
       console.log(response.data);
       if (response?.data?.jwt) {
         const jwt = await response?.data?.jwt;
-        localStorage.setItem("token", jwt);
+        localStorage.setItem("token", "Bearer " + jwt);
         navigate("/blogs");
       } else alert(response?.data.error);
     } catch (err) {

@@ -1,7 +1,13 @@
 import Appbar from "../components/Appbar";
 import BlogCard from "../components/BlogCard";
+import { useBlogs } from "../hooks";
 
 const Blogs = () => {
+  const { loading, blogs } = useBlogs();
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
   return (
     <div className="">
       <div>
@@ -9,42 +15,17 @@ const Blogs = () => {
       </div>
       <div className="flex justify-center">
         <div className="space-y-2">
-          <BlogCard
-            authorName="Ujjwal Mishra"
-            title="How an ugly single page website makes $5000 a month without affiliate marketing"
-            content="How an ugly single page website makes $5000 a month without affiliate marketting, How an ugly single page website maeks $5000 a month without affiliate marketting"
-            publishedDate="23-Aug-2025"
-          />
-          <BlogCard
-            authorName="Ujjwal Mishra"
-            title="How an ugly single page website makes $5000 a month without affiliate marketing"
-            content="How an ugly single page website makes $5000 a month without affiliate marketting, How an ugly single page website maeks $5000 a month without affiliate marketting"
-            publishedDate="23-Aug-2025"
-          />
-          <BlogCard
-            authorName="Ujjwal Mishra"
-            title="How an ugly single page website makes $5000 a month without affiliate marketing"
-            content="How an ugly single page website makes $5000 a month without affiliate marketting, How an ugly single page website maeks $5000 a month without affiliate marketting"
-            publishedDate="23-Aug-2025"
-          />
-          <BlogCard
-            authorName="Ujjwal Mishra"
-            title="How an ugly single page website makes $5000 a month without affiliate marketing"
-            content="How an ugly single page website makes $5000 a month without affiliate marketting, How an ugly single page website maeks $5000 a month without affiliate marketting"
-            publishedDate="23-Aug-2025"
-          />
-          <BlogCard
-            authorName="Ujjwal Mishra"
-            title="How an ugly single page website makes $5000 a month without affiliate marketing"
-            content="How an ugly single page website makes $5000 a month without affiliate marketting, How an ugly single page website maeks $5000 a month without affiliate marketting"
-            publishedDate="23-Aug-2025"
-          />
-          <BlogCard
-            authorName="Ujjwal Mishra"
-            title="How an ugly single page website makes $5000 a month without affiliate marketing"
-            content="How an ugly single page website makes $5000 a month without affiliate marketting, How an ugly single page website maeks $5000 a month without affiliate marketting"
-            publishedDate="23-Aug-2025"
-          />
+          {blogs.map((blog: any) => (
+            <div key={blog.id}>
+              <BlogCard
+                id={blog.id}
+                authorName={blog?.author.name || "Anonymous"}
+                title={blog?.title}
+                content={blog?.content}
+                publishedDate="23-Aug-2025"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
