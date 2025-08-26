@@ -1,12 +1,27 @@
 import Appbar from "../components/Appbar";
 import BlogCard from "../components/BlogCard";
+import { BlogSkeleton } from "../components/BlogSkeleton";
 import { useBlogs } from "../hooks";
 
 const Blogs = () => {
   const { loading, blogs } = useBlogs();
 
   if (loading) {
-    return <div>loading...</div>;
+    return (
+      <div>
+        <Appbar />
+        <div className="space-y-8 mt-5 flex flex-col items-center">
+          <BlogSkeleton />
+          <BlogSkeleton />
+          <BlogSkeleton />
+          <BlogSkeleton />
+          <BlogSkeleton />
+          <BlogSkeleton />
+          <BlogSkeleton />
+          <BlogSkeleton />
+        </div>
+      </div>
+    );
   }
   return (
     <div className="">
